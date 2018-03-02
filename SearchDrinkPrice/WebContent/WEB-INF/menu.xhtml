@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pu="http://primefaces.org/ultima">
+	<h:form id="menuform">
+		<div class="layout-menu #{menuLayoutMB.menuClass}">
+			<div class="nano">
+				<div class="nano-content menu-scroll-content">
+					<ui:fragment rendered="#{menuLayoutMB.profileMode == 'inline' and menuLayoutMB.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+						<div class="profile">
+							<div class="profile-image"></div>
+							<a id="profile-options" href="#"> <span class="profile-name Wid100Percent"><p:outputLabel value="#{sessionManaged.usuarioLogado.usuStrNome}" /></span></a>
+						</div>
+					</ui:fragment>
+					<pu:menu widgetVar="me" model="#{sessionManaged.menu}" id="menu_itens" />
+				</div>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>

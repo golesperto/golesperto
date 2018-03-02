@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>Lume Insights</title>
+	<script />
+	<script type="text/javascript" src="../resources/js/layout.js"></script>
+	<script type="text/javascript" src="../resources/js/ripple.js"></script>
+	<link href="../resources/css/ripple.css" rel="stylesheet" type="text/css"></link>
+	<link href="../resources/css/layout-#{menuLayoutMB.theme}.css" rel="stylesheet" type="text/css"></link>
+</h:head>
+
+<h:body styleClass="login-body">
+	<h:form id="formPrincipal">
+		<p:ajaxStatus onstart="PF('loading').show();" onsuccess="PF('loading').hide();" />
+
+		<p:dialog modal="true" widgetVar="loading" draggable="false" closable="false" showHeader="false" resizable="false">
+			<i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+				Carregando...
+		</p:dialog>
+
+		<div class="card login-panel ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<p:graphicImage value="/resources/images/logo_old_preta.png" styleClass="Wid70" />
+				</div>
+				<div class="ui-g-12">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText value="#{loginMB.entity.usuStrEmail}" id="email" required="true" />
+						<label>E-mail</label>
+					</h:panelGroup>
+				</div>
+				<div class="ui-g-12">
+					<p:commandButton value="Enviar nova senha" icon="fa fa-check" styleClass="secondary" actionListener="#{loginMB.actionRecuperar}" process=":formPrincipal" />
+					<p:messages id="mensagens" showDetail="true" autoUpdate="true" globalOnly="true" />
+					<h:outputLink value="login.jsf" styleClass="secondary">Voltar</h:outputLink>
+				</div>
+			</div>
+		</div>
+	</h:form>
+	<div class="login-footer">© 2017 DevelopMinds - sdp - All rights reserved.</div>
+</h:body>
+
+</html>

@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Tipos de Produto</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+
+		<p:dialog widgetVar="dlg" modal="true" responsive="true" onHide="PF('dlg').toggleMaximize();">
+
+			<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" id="pnlCrud">
+				<h:panelGroup styleClass="md-inputfield MarTop18">
+					<p:inputText id="prtstrtipo" value="#{produtoTipoMB.entity.prtStrTipo}" required="true" maxlength="150" styleClass="Wid100Percent" />
+					<p:outputLabel for="prtstrtipo" value="Tipo" />
+				</h:panelGroup>
+			</p:panelGrid>
+			<h:panelGroup styleClass="MarLeft15">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-lg-6">
+						<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{produtoTipoMB.actionPersist}" update="pnlCrud,tbCrud" process="@this,pnlCrud"
+							oncomplete="handleDialogRequest(xhr, status, args);" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+					</div>
+					<div class="ui-g-12 ui-lg-6">
+						<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+					</div>
+				</div>
+			</h:panelGroup>
+
+		</p:dialog>
+
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12 ui-lg-12">
+
+				<div class="card card-w-title">
+					<h1>Tipos de Produto</h1>
+
+					<p:dataTable emptyMessage="Nenhum produtoTipo Encontrado" id="tbCrud" value="#{produtoTipoMB.entityList}" var="objeto" rows="10" paginatorPosition="bottom"
+						paginatorAlwaysVisible="true" paginator="true">
+						<f:facet name="header">Tipos de Produto</f:facet>
+
+						<p:column filterBy="#{objeto.prtStrTipo}" filterMatchMode="contains" headerText="Tipo" sortBy="#{objeto.prtStrTipo}">
+							<h:outputText value="#{objeto.prtStrTipo}" />
+						</p:column>
+
+						<p:column headerText="Editar">
+							<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat" value="Editar" process="@this" update=":sdp:pnlCrud"
+								oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+								<f:setPropertyActionListener value="#{objeto}" target="#{produtoTipoMB.entity}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column headerText="Excluir">
+							<p:commandButton icon="ui-icon-remove" value="Excluir" styleClass="red-btn flat" action="#{produtoTipoMB.actionRemove}" update="tbCrud" process="@this">
+								<f:setPropertyActionListener value="#{objeto}" target="#{produtoTipoMB.entity}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<h:panelGroup id="botoes">
+						<div class="ui-g-12 ui-lg-4"></div>
+						<div class="ui-g-12 ui-lg-4">
+							<p:commandButton icon="ui-icon-add" styleClass="secondary flat" value="Adicionar" actionListener="#{produtoTipoMB.actionNew}" process="@this"
+								oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnlCrud,:sdp:tbCrud" />
+						</div>
+						<div class="ui-g-12 ui-lg-4"></div>
+					</h:panelGroup>
+					<br /> <br />
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function handleDialogRequest(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').toggleMaximize();
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>

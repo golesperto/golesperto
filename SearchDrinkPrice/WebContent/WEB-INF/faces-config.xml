@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<application>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
+
+		<resource-bundle>
+			<base-name>com.sdp.resource.sdp</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		<message-bundle>com.sdp.resource.sdp</message-bundle>
+	</application>
+
+	<application>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>com.sdp.resource.sdp</base-name>
+			<var>sdp</var>
+		</resource-bundle>
+		<message-bundle>com.sdp.resource.sdp</message-bundle>
+	</application>
+
+	<component>
+		<component-type>org.primefaces.component.UltimaMenu</component-type>
+		<component-class>org.primefaces.ultima.component.menu.UltimaMenu</component-class>
+	</component>
+
+	<render-kit>
+		<renderer>
+			<component-family>org.primefaces.component</component-family>
+			<renderer-type>org.primefaces.component.UltimaMenuRenderer</renderer-type>
+			<renderer-class>org.primefaces.ultima.component.menu.UltimaMenuRenderer</renderer-class>
+		</renderer>
+	</render-kit>
+
+	<managed-bean>
+		<managed-bean-name>empresaMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.EmpresaMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>loginMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.LoginMB</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>menuLayoutMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.MenuLayoutMB</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>menuMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.MenuMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>objetoMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.ObjetoMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>perfilMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.PerfilMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>perfilObjetoMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.PerfilObjetoMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>sessionManaged</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.SessionManaged</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>sobreMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.SobreMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>trocaMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.TrocaMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>usuarioMB</managed-bean-name>
+		<managed-bean-class>com.sdp.managed.UsuarioMB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<lifecycle>
+		<phase-listener>com.sdp.util.AuthorizationListener</phase-listener>
+	</lifecycle>
+
+</faces-config>

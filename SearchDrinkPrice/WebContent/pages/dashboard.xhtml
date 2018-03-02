@@ -1,0 +1,192 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateDashboard.xhtml">
+
+	<ui:define name="title">Produtos</ui:define>
+
+	<ui:define name="head">
+		<script src="https://maps.google.com/maps/api/js?key=AIzaSyDZG7yj_kekBNbH6fyRlJW3xaO33QJSDzM" type="text/javascript"></script>
+	</ui:define>
+
+	<ui:define name="content">
+		<style>
+@media ( min-width : 1025px) {
+	.layout-wrapper.menu-layout-static .layout-main {
+		margin-left: 0px !important;
+	}
+}
+</style>
+		<h:panelGroup id="pnPrincipal">
+			<h:inputHidden id="lat" value="#{dashboardMB.lat}" />
+			<h:inputHidden id="lng" value="#{dashboardMB.lng}" />
+			<h:panelGroup id="pnProdutos" rendered="#{!dashboardMB.mostrarDetalhes}">
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12 ui-lg-12">
+						<div class="ui-g-12 ui-lg-2"></div>
+						<div class="ui-g-12 ui-lg-8">
+							<div class="card card-w-title">
+								<h1>Filtros</h1>
+								<p:panelGrid id="filtros" columns="2" styleClass="form-group ui-panelgrid-blank" layout="grid">
+									<h:panelGroup>
+										<p:selectOneMenu id="empresa" value="#{dashboardMB.empresaSelecionada}" label="Empresa" filter="true" filterMatchMode="contains" layout="grid" converter="empresa">
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Empresa" itemValue="#{null}" />
+											<f:selectItems value="#{dashboardMB.empresas}" var="empresa" itemLabel="#{empresa.empStrNome}" itemValue="#{empresa}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+
+									<h:panelGroup>
+										<p:selectOneMenu id="marca" value="#{dashboardMB.marcaSelecionada}" label="Marca" filter="true" filterMatchMode="contains" layout="grid" converter="marca">
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Marca" itemValue="#{null}" />
+											<f:selectItems value="#{dashboardMB.marcas}" var="marca" itemLabel="#{marca.marStrNome}" itemValue="#{marca}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+
+									<h:panelGroup>
+										<p:selectOneMenu id="tipoproduto" value="#{dashboardMB.produtoTipoSelecionado}" style="min-width: 153px !important;" styleClass="Wid100Percent" label="Tipo Produto"
+											filter="true" filterMatchMode="contains" layout="grid" converter="produtotipo">
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione um Tipo de Produto" itemValue="#{null}" />
+											<f:selectItems value="#{dashboardMB.produtoTipos}" var="produto" itemLabel="#{produto.prtStrTipo}" itemValue="#{produto}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+
+									<h:panelGroup>
+										<p:selectOneMenu id="produto" value="#{dashboardMB.produtoSelecionado}" styleClass="Wid100Percent" label="Produto" filter="true" filterMatchMode="contains" layout="grid"
+											converter="produto">
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione um Produto" itemValue="#{null}" />
+											<f:selectItems value="#{dashboardMB.produtos}" var="produto" itemLabel="#{produto.proStrNome}" itemValue="#{produto}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+
+									<h:panelGroup>
+										<p:selectOneMenu id="km" value="#{dashboardMB.distancia}" label="Distância" style="min-width: 153px !important;" styleClass="Wid100Percent" filter="true"
+											filterMatchMode="contains" layout="grid">
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Distância em KM" itemValue="#{null}" />
+											<f:selectItem itemLabel="até 5 KM" itemValue="5" />
+											<f:selectItem itemLabel="até 10 KM" itemValue="10" />
+											<f:selectItem itemLabel="até 15 KM" itemValue="15" />
+											<f:selectItem itemLabel="até 20 KM" itemValue="20" />
+											<f:selectItem itemLabel="até 25 KM" itemValue="25" />
+											<f:selectItem itemLabel="até 30 KM" itemValue="30" />
+											<f:selectItem itemLabel="até 35 KM" itemValue="35" />
+											<f:selectItem itemLabel="até 40 KM" itemValue="40" />
+											<f:selectItem itemLabel="até 45 KM" itemValue="45" />
+											<f:selectItem itemLabel="até 50 KM" itemValue="50" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</p:panelGrid>
+								<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank" layout="grid">
+									<p:commandButton id="save" icon="ui-icon-search" value="Filtrar" update=":sdp:pnPrincipal" process="@this, filtros, :sdp:lat, :sdp:lng"
+										actionListener="#{dashboardMB.carregarEntityList}" />
+								</p:panelGrid>
+							</div>
+							<div class="ui-g-12 ui-lg-2"></div>
+						</div>
+					</div>
+				</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12 ui-lg-12">
+						<p:dataGrid value="#{dashboardMB.entityList}" var="produto" columns="4" layout="grid" id="dtgProduto" emptyMessage="Nenhum Produto Encontrado" paginator="true" rows="12"
+							paginatorPosition="bottom" lazy="true">
+							<f:facet name="header">
+								<p:outputLabel value="Produtos" />
+							</f:facet>
+
+							<p:panel styleClass="TxtAlgCenter Hei300">
+								<h:panelGrid columns="1" styleClass="Wid100Percent Hei100Percent">
+
+									<p:graphicImage value="#{produto.produto.imagemProduto}" width="150" height="150" stream="false" />
+
+									<h:outputText value="#{produto.produto.proStrNome} - #{produto.produto.volume.prvStrVolume}" />
+									<h:outputText value="#{produto.eprFltValor}">
+										<f:convertNumber maxFractionDigits="2" type="currency" currencySymbol="R$" />
+									</h:outputText>
+									<p:outputLabel value="#{produto.status}" escape="false" />
+
+									<p:commandButton id="btnDetalhes" value="Detalhes" process="@this" oncomplete="topPage();" update=":sdp:pnPrincipal" icon="ui-icon-search">
+										<f:setPropertyActionListener value="#{produto}" target="#{dashboardMB.carregarDetalhes}" />
+									</p:commandButton>
+								</h:panelGrid>
+							</p:panel>
+						</p:dataGrid>
+					</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup id="pnDetalhes" rendered="#{dashboardMB.mostrarDetalhes}">
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12 ui-lg-12">
+						<p:panel header="Detalhes">
+							<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank" layout="grid">
+								<h:panelGroup>
+									<p:graphicImage value="#{dashboardMB.entity.produto.imagemProduto}" width="180" height="180" stream="false" />
+									<div class="ui-g">
+										<div class="ui-g-12 ui-lg-6">
+											<p:panel header="Produto" styleClass="TxtAlgLeft">
+												<h:outputText value="#{dashboardMB.entity.produto.proStrNome} - #{dashboardMB.entity.produto.volume.prvStrVolume}" />
+												<br />
+												<h:outputText value="#{dashboardMB.entity.eprFltValor}">
+													<f:convertNumber maxFractionDigits="2" type="currency" currencySymbol="R$" />
+												</h:outputText>
+												<br />
+												<p:outputLabel value="#{dashboardMB.entity.status}" escape="false" />
+											</p:panel>
+										</div>
+										<div class="ui-g-12 ui-lg-6">
+											<p:panel header="Endereço" styleClass="TxtAlgLeft">
+												<h:outputText
+													value="#{dashboardMB.entity.empresa.empStrEndereco}, #{dashboardMB.entity.empresa.empStrBairro} , #{dashboardMB.entity.empresa.empStrCidade} - #{dashboardMB.entity.empresa.empChaUf}" />
+												<br />
+												<h:outputText value="Tel: #{dashboardMB.entity.empresa.telefoneFormatado}" />
+												<br />
+												<h:outputText value="Cel: #{dashboardMB.entity.empresa.celularFormatado}" />
+												<br />
+												<br />
+												<p:commandButton process="@this" value="Horário de Atendimento" styleClass="red-btn" oncomplete="PF('dlgHorario').show();" update=":sdp:dlgHorario" />
+											</p:panel>
+										</div>
+									</div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<p:gmap id="gmap" center="#{dashboardMB.centerGeoMap}" zoom="18" type="HYBRID" style="width:100%;height:400px;" model="#{dashboardMB.mapModel}" widgetVar="gmap">
+										<p:ajax event="geocode" update="@this" process="@this" listener="#{dashboardMB.onGeocode}" />
+									</p:gmap>
+								</h:panelGroup>
+							</p:panelGrid>
+							<p:commandButton value="Voltar" actionListener="#{dashboardMB.actionVoltar}" oncomplete="topPage();" process="@this" update=":sdp:pnPrincipal"
+								styleClass="red-btn Wid100Percent" />
+						</p:panel>
+					</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup id="dlgHorario">
+				<p:dialog header="Horário de Funcionamento" modal="true" responsive="true" widgetVar="dlgHorario">
+					<p:dataList value="#{dashboardMB.entity.empresa.empresaDias}" var="dia" emptyMessage="Nenhum Registro Encontrado!">
+						<h:outputText value="#{dia.diasFuncionamento.dfuStrNome} das #{dia.dfuDtmAberturaStr} às #{dia.dfuDtmFechamentoStr}" />
+					</p:dataList>
+					<br />
+					<p:commandButton value="Fechar" icon="fa fa-times" styleClass="Wid100Percent red-btn" onclick="PF('dlgHorario').hide();" />
+				</p:dialog>
+			</h:panelGroup>
+		</h:panelGroup>
+		<script type="text/javascript">
+			$(function() {
+				getLocation();
+			});
+
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(setPosition);
+				}
+			}
+
+			function setPosition(pos) {
+				$('#sdp\\:lat').val(pos.coords.latitude);
+				$('#sdp\\:lng').val(pos.coords.longitude);
+			}
+
+			function topPage() {
+				$('html, body').animate({
+					scrollTop : 0
+				}, 'slow');
+			}
+		</script>
+	</ui:define>
+</ui:composition>

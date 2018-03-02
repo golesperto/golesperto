@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Produtos</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+
+		<h:panelGroup id="dlg">
+			<p:dialog widgetVar="dlg" modal="true" responsive="true" onHide="PF('dlg').toggleMaximize();">
+				<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" id="pnlCrud">
+					<h:panelGroup styleClass="md-inputfield MarTop18">
+						<p:inputText id="prostrnome" value="#{produtoMB.entity.proStrNome}" required="true" maxlength="150" styleClass="Wid100Percent" />
+						<p:outputLabel for="prostrnome" value="Nome" />
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="md-combo">
+						<p:outputLabel for="tipo" value="Tipo de Produto" styleClass="TxtAlgLeft" />
+						<p:selectOneMenu id="tipo" value="#{produtoMB.entity.tipo}" label="Tipo de Produto" layout="grid" styleClass="Wid100Percent" converter="produtotipo">
+							<f:selectItem noSelectionOption="true" itemLabel="Selecione um Tipo de Produto" itemValue="#{null}" />
+							<f:selectItems value="#{produtoMB.produtosTipo}" var="tipo" itemLabel="#{tipo.prtStrTipo}" itemValue="#{tipo}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="md-combo">
+						<p:outputLabel for="volume" value="Volume do Produto" styleClass="TxtAlgLeft" />
+						<p:selectOneMenu id="volume" value="#{produtoMB.entity.volume}" label="Volume do Produto" layout="grid" styleClass="Wid100Percent" converter="produtovolume">
+							<f:selectItem noSelectionOption="true" itemLabel="Selecione um Volume do Produto" itemValue="#{null}" />
+							<f:selectItems value="#{produtoMB.produtosVolume}" var="volume" itemLabel="#{volume.prvStrVolume}" itemValue="#{volume}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="md-combo">
+						<p:outputLabel for="marca" value="Marca do Produto" styleClass="TxtAlgLeft" />
+						<p:selectOneMenu id="marca" value="#{produtoMB.entity.marca}" label="Marca do Produto" layout="grid" styleClass="Wid100Percent" converter="marca">
+							<f:selectItem noSelectionOption="true" itemLabel="Selecione um Estado" itemValue="#{null}" />
+							<f:selectItems value="#{produtoMB.marcas}" var="marca" itemLabel="#{marca.marStrNome}" itemValue="#{item}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</p:panelGrid>
+				<div class="ui-g">
+					<div class="ui-g-5"></div>
+					<div class="ui-g-2">
+						<p:graphicImage id="photo" value="#{produtoMB.entity.imagemProduto}" width="200" height="200" stream="false" />
+					</div>
+					<div class="ui-g-5"></div>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<p:fileUpload fileUploadListener="#{produtoMB.upload}" label="Arquivo de Imagem" auto="true" invalidSizeMessage="Tamanho inválido de arquivo, deve ser 100 KB."
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/" value="Carregar" mode="advanced" sizeLimit="100000" style="margin-top: 4px;" process="@this" update=":sdp:photo" />
+					</div>
+				</div>
+				<h:panelGroup styleClass="MarLeft15">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-lg-6">
+							<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{produtoMB.actionPersist}" update="pnlCrud,tbCrud" process="@this,pnlCrud"
+								oncomplete="handleDialogRequest(xhr, status, args);" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+						</div>
+						<div class="ui-g-12 ui-lg-6">
+							<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+						</div>
+					</div>
+				</h:panelGroup>
+			</p:dialog>
+		</h:panelGroup>
+
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-12 ui-lg-12">
+				<div class="card card-w-title">
+					<p:dataTable emptyMessage="Nenhum produto Encontrado" id="tbCrud" value="#{produtoMB.entityList}" var="objeto" rows="10" paginatorPosition="bottom"
+						paginatorAlwaysVisible="true" paginator="true">
+						<f:facet name="header">Produtos</f:facet>
+
+						<p:column filterBy="#{objeto.tipo.prtStrTipo} - #{objeto.marca.marStrNome} - #{objeto.proStrNome} - #{objeto.volume.prvStrVolume}" filterMatchMode="contains"
+							headerText="Nome" sortBy="#{objeto.marca.marStrNome} - #{objeto.proStrNome}">
+							<h:outputText value="#{objeto.tipo.prtStrTipo} - #{objeto.marca.marStrNome} - #{objeto.proStrNome} - #{objeto.volume.prvStrVolume}" />
+						</p:column>
+
+						<p:column headerText="Editar">
+							<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat" value="Editar" process="@this" update=":sdp:pnlCrud"
+								oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+								<f:setPropertyActionListener value="#{objeto}" target="#{produtoMB.entity}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column headerText="Excluir">
+							<p:commandButton icon="ui-icon-remove" value="Excluir" styleClass="red-btn flat" action="#{produtoMB.actionRemove}" update="tbCrud" process="@this">
+								<f:setPropertyActionListener value="#{objeto}" target="#{produtoMB.entity}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<h:panelGroup id="botoes">
+						<div class="ui-g-12 ui-lg-4"></div>
+						<div class="ui-g-12 ui-lg-4">
+							<p:commandButton icon="ui-icon-add" styleClass="secondary flat" value="Adicionar" actionListener="#{produtoMB.actionNew}" process="@this"
+								oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnlCrud,:sdp:tbCrud" />
+						</div>
+						<div class="ui-g-12 ui-lg-4"></div>
+					</h:panelGroup>
+					<br /> <br />
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function handleDialogRequest(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').toggleMaximize();
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>

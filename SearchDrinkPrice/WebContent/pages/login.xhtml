@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>sdp</title>
+	<script />
+	<script type="text/javascript" src="../resources/js/layout.js"></script>
+	<script type="text/javascript" src="../resources/js/ripple.js"></script>
+	<link href="../resources/css/ripple.css" rel="stylesheet" type="text/css"></link>
+	<link href="../resources/css/layout-#{menuLayoutMB.theme}.css" rel="stylesheet" type="text/css"></link>
+	<link rel="shortcut icon" href="../resources/images/adm.ico" type="image/x-icon"></link>
+	<link href="../resources/css/sdp.css" rel="stylesheet" type="text/css"></link>
+</h:head>
+
+<h:body styleClass="login-body">
+	<h:form id="formPrincipal">
+		<p:ajaxStatus onstart="PF('loading').show();" onsuccess="PF('loading').hide();" />
+
+		<p:dialog modal="true" widgetVar="loading" draggable="false" closable="false" showHeader="false" resizable="false">
+			<i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+				Carregando...
+			</p:dialog>
+
+		<div class="card login-panel ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<p:graphicImage value="/resources/images/adm.jpg" styleClass="Wid70" />
+				</div>
+				<div class="ui-g-12">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText value="#{loginMB.entity.usuStrLogin}" id="login" />
+						<label>Login</label>
+					</h:panelGroup>
+				</div>
+				<div class="ui-g-12">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:password value="#{loginMB.entity.usuStrSenha}" id="senha" />
+						<label>Senha</label>
+					</h:panelGroup>
+				</div>
+				<div class="ui-g-12">
+					<p:commandButton value="Entrar" icon="ui-icon-person" actionListener="#{loginMB.actionLogin}" process=":formPrincipal" oncomplete="limpaMenu();" styleClass="secondary" />
+					<p:commandButton value="Esqueceu sua senha" actionListener="#{loginMB.redirectToRecuperar}" process="@this" icon="ui-icon-help" />
+				</div>
+			</div>
+			<div class="ui-g">
+				<p:messages id="mensagens" showDetail="true" autoUpdate="true" globalOnly="true" styleClass="Wid100Percent" />
+			</div>
+		</div>
+		<div class="login-footer">© 2017 DevelopMinds - Search Drink Price - All rights reserved.</div>
+	</h:form>
+	<script type="text/javascript">
+		$(function() {
+			$("#formPrincipal\\:login").change(function() {
+				if ($("#formPrincipal\\:login").val() != "") {
+					$("#formPrincipal\\:login").addClass("ui-state-filled");
+					$("#formPrincipal\\:senha").addClass("ui-state-filled");
+				}
+			});
+		});
+
+		function limpaMenu() {
+			$.removeCookie('ultima_expandeditems', {
+				path : '/'
+			});
+			$.removeCookie('ultima_inlineprofile_expanded', {
+				path : '/'
+			});
+		}
+	</script>
+</h:body>
+</html>

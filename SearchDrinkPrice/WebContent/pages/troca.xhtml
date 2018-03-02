@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Trocar Senha</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+		<p:panelGrid styleClass="Wid100Percent MarTop20">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="3">
+						<i class="fa fa-key" /> Trocar Senha</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+		<h:panelGroup id="pnPrincipal">
+			<div class="ui-g">
+				<div class="ui-g-1 ui-md-2 ui-lg-3"></div>
+				<div class="ui-g-10 ui-md-8 ui-lg-6 ui-fluid contact-form">
+					<p:panel>
+						<div class="ui-g">
+							<div class="ui-g-12 MarTop15">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="login" value="#{trocaMB.entity.usuStrLogin}" disabled="true" maxlength="15" />
+									<p:outputLabel for="login" value="Login" />
+								</h:panelGroup>
+							</div>
+							<div class="ui-g-12 MarTop20">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:password id="senha" value="#{trocaMB.senhaAntiga}" required="true" promptLabel="Digite Sua Senha Antiga" maxlength="15" />
+									<p:outputLabel for="senha" value="Digite Sua Senha Antiga" />
+								</h:panelGroup>
+							</div>
+							<div class="ui-g-12 MarTop20">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:password id="senhaNova" match="senhaConf" value="#{trocaMB.senhaNova}" required="true" weakLabel="Fraca" goodLabel="Normal" strongLabel="Forte"
+										promptLabel="Digite Sua Nova Senha" maxlength="15" />
+									<p:outputLabel for="senhaNova" value="Digite Sua Nova Senha" />
+									<p:message styleClass="msg" for="senhaNova" />
+								</h:panelGroup>
+							</div>
+							<div class="ui-g-12 MarTop20">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:password id="senhaConf" feedback="false" value="#{trocaMB.senhaNova}" required="true" promptLabel="Confirmar a Nova Senha" maxlength="15" />
+									<p:outputLabel for="senhaConf" value="Confirmar a Nova Senha" />
+									<p:message styleClass="msg" for="senhaConf" />
+								</h:panelGroup>
+							</div>
+						</div>
+						<p:commandButton value="Confirmar" styleClass="MarTop10 secondary" icon="fa fa-check" process="@this, :sdp:pnPrincipal" update=":sdp:pnPrincipal"
+							actionListener="#{trocaMB.actionPersist}" />
+					</p:panel>
+				</div>
+				<div class="ui-g-1 ui-md-2 ui-lg-3"></div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

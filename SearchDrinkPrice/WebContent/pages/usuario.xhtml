@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cadastro de Usuario</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+
+		<h:panelGroup id="pnPrincipal">
+			<h:inputHidden id="id" value="#{usuarioMB.entity.usuIntCod}" />
+
+			<h:panelGroup id="pnUsuario">
+				<p:dialog widgetVar="dlg" responsive="true" modal="true" id="dlgusuario" onHide="PF('dlg').toggleMaximize();">
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" id="pnlUsuario">
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="nome" value="#{usuarioMB.entity.usuStrNome}" required="true" styleClass="Wid100Percent" maxlength="100" />
+							<p:outputLabel for="nome" value="Nome" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="email" value="#{usuarioMB.entity.usuStrEmail}" required="true" styleClass="Wid100Percent" maxlength="50" />
+							<p:outputLabel for="email" value="E-mail" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="login" value="#{usuarioMB.entity.usuStrLogin}" disabled="#{usuarioMB.editar}" required="true" styleClass="Wid100Percent" maxlength="50" />
+							<p:outputLabel for="login" value="Login" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="perfil" value="Perfil" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="perfil" value="#{usuarioMB.entity.perfil}" label="Perfil" required="true" layout="grid" styleClass="Wid100Percent" converter="perfil">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Perfil" itemValue="#{null}" />
+								<f:selectItems value="#{usuarioMB.perfis}" var="perfil" itemLabel="#{perfil.perStrNome}" itemValue="#{perfil}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="status" value="Status" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="status" value="#{usuarioMB.entity.usuChaStatus}" required="true" label="Status" layout="grid" styleClass="Wid100Percent">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Status" itemValue="#{null}" />
+								<f:selectItems value="#{usuarioMB.status}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</p:panelGrid>
+
+					<h:panelGroup styleClass="MarLeft15">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{usuarioMB.actionPersist}" update=":sdp:pnPrincipal" process="@this, :sdp:pnlUsuario"
+									oncomplete="handleDialogSubmit(xhr, status, args)" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+							</div>
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+							</div>
+						</div>
+					</h:panelGroup>
+				</p:dialog>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{usuarioMB.usuarioAdministrador}">
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12 ui-lg-12">
+						<div class="ui-g-12 ui-lg-2"></div>
+						<div class="ui-g-12 ui-lg-8">
+							<div class="card card-w-title">
+								<h1>Filtros</h1>
+								<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank" layout="grid">
+									<h:panelGroup>
+										<p:outputLabel for="empresa" value="Empresa" />
+										<p:selectOneMenu id="empresa" value="#{usuarioMB.empresaSelecionada}" label="Empresa" filter="true" filterMatchMode="contains" layout="grid" converter="empresa">
+											<p:ajax process="@this" update=":sdp:pnPrincipal, :sdp:botoes" listener="#{usuarioMB.carregarEntityList}" />
+											<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Empresa" itemValue="#{null}" />
+											<f:selectItems value="#{usuarioMB.empresas}" var="empresa" itemLabel="#{empresa.empStrNome}" itemValue="#{empresa}" />
+										</p:selectOneMenu>
+										<p:message styleClass="msg" for="empresa" />
+									</h:panelGroup>
+								</p:panelGrid>
+							</div>
+							<div class="ui-g-12 ui-lg-2"></div>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup id="pnCrud">
+				<p:dataTable emptyMessage="Nenhum usuario encontrado" id="tbusuario" value="#{usuarioMB.entityList}" var="usuario" rows="10" paginatorPosition="bottom"
+					paginatorAlwaysVisible="true" paginator="true" reflow="true">
+					<f:facet name="header">Lista de Usuários</f:facet>
+					<p:column filterBy="#{usuario.usuStrNome}" sortBy="#{usuario.usuStrNome}" filterMatchMode="contains" headerText="Razão Social">
+						<h:outputText value="#{usuario.usuStrNome}" />
+					</p:column>
+					<p:column filterBy="#{usuario.usuStrEmail}" filterMatchMode="contains" headerText="E-mail" sortBy="#{usuario.usuStrEmail}">
+						<h:outputText value="#{usuario.usuStrEmail}" />
+					</p:column>
+					<p:column filterBy="#{usuario.empresa.empStrNome}" filterMatchMode="contains" headerText="Empresa" sortBy="#{usuario.empresa.empStrNome}">
+						<h:outputText value="#{usuario.empresa.empStrNome}" />
+					</p:column>
+					<p:column filterBy="#{usuario.statusStr}" filterMatchMode="contains" headerText="Status" sortBy="#{usuario.statusStr}">
+						<h:outputText value="#{usuario.statusStr}" />
+					</p:column>
+
+					<p:column headerText="Editar" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat Wid100Percent" value="Editar" process="@this" update=":sdp:pnUsuario"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+							<f:setPropertyActionListener value="#{usuario}" target="#{usuarioMB.entity}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:panelGroup id="botoes">
+					<div class="ui-g-12 ui-lg-4"></div>
+					<div class="ui-g-12 ui-lg-4">
+						<p:commandButton icon="ui-icon-add" resetValues="true" value="Adicionar" styleClass="secondary flat Wid100Percent" actionListener="#{usuarioMB.actionNew}" process="@this"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnPrincipal" rendered="#{usuarioMB.empresaSelecionada != null}" />
+					</div>
+					<div class="ui-g-12 ui-lg-4"></div>
+				</h:panelGroup>
+				<br />
+				<br />
+			</h:panelGroup>
+		</h:panelGroup>
+		<script type="text/javascript">
+			function handleDialogSubmit(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>

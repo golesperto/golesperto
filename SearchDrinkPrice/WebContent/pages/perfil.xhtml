@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cadastro de Perfil</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="pnPrincipal">
+			<h:inputHidden id="id" value="#{perfilMB.entity.perIntCod}" />
+			<h:panelGroup id="pnPerfil">
+				<p:dialog widgetVar="dlg" modal="true" id="dlgPerfil" responsive="true" onHide="PF('dlg').toggleMaximize();">
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group TxtAlgCenter" id="pnlPerfil">
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="nome" value="#{perfilMB.entity.perStrNome}" required="true" styleClass="Wid100Percent" maxlength="100" />
+							<p:outputLabel for="nome" value="Nome" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="tipo" value="#{perfilMB.entity.perChaTipo}" required="true" styleClass="Wid100Percent" maxlength="1" />
+							<p:outputLabel for="tipo" value="Tipo" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="status" value="Status" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="status" value="#{perfilMB.entity.perChaStatus}" label="Status" required="true" layout="grid" styleClass="Wid100Percent">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Status" itemValue="#{null}" />
+								<f:selectItems value="#{perfilMB.status}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+					</p:panelGrid>
+					<h:panelGroup styleClass="MarLeft15">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{perfilMB.actionPersist}" update=":sdp:pnPrincipal" process="@this, :sdp:pnlPerfil"
+									oncomplete="handleDialogSubmit(xhr, status, args)" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+							</div>
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+							</div>
+						</div>
+					</h:panelGroup>
+				</p:dialog>
+			</h:panelGroup>
+
+			<h:panelGroup id="pnCrud">
+				<p:dataTable emptyMessage="Nenhum perfil Encontrado" id="tbPerfil" value="#{perfilMB.entityList}" var="perfil" rows="10" paginatorPosition="bottom"
+					paginatorAlwaysVisible="true" paginator="true" reflow="true">
+					<f:facet name="header">Lista de Perfis</f:facet>
+					<p:column filterBy="#{perfil.perStrNome}" sortBy="#{perfil.perStrNome}" filterMatchMode="contains" headerText="Nome">
+						<h:outputText value="#{perfil.perStrNome}" />
+					</p:column>
+					<p:column filterBy="#{perfil.perChaTipo}" filterMatchMode="contains" headerText="Tipo" sortBy="#{perfil.perChaTipo}">
+						<h:outputText value="#{perfil.perChaTipo}" />
+					</p:column>
+					<p:column filterBy="#{perfil.statusStr}" filterMatchMode="contains" headerText="Status" sortBy="#{perfil.statusStr}">
+						<h:outputText value="#{perfil.statusStr}" />
+					</p:column>
+					<p:column headerText="Editar" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat Wid100Percent" value="Editar" process="@this" update=":sdp:pnPrincipal"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+							<f:setPropertyActionListener value="#{perfil}" target="#{perfilMB.entity}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column headerText="Excluir" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-remove" value="Excluir" styleClass="red-btn flat Wid100Percent" action="#{perfilMB.actionRemove}" update="tbPerfil" process="@this">
+							<f:setPropertyActionListener value="#{perfil}" target="#{perfilMB.entity}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:panelGroup id="botoes">
+					<div class="ui-g-12 ui-lg-4"></div>
+					<div class="ui-g-12 ui-lg-4">
+						<p:commandButton icon="ui-icon-add" resetValues="true" value="Adicionar" styleClass="secondary flat Wid100Percent" actionListener="#{perfilMB.actionNew}" process="@this"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnPrincipal" />
+					</div>
+					<div class="ui-g-12 ui-lg-4"></div>
+				</h:panelGroup>
+				<br />
+				<br />
+			</h:panelGroup>
+		</h:panelGroup>
+		<script type="text/javascript">
+			function handleDialogSubmit(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>

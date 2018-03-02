@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cadastro de Perfil Objeto</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="pnPrincipal">
+			<h:inputHidden id="id" value="#{perfilObjetoMB.entity.pobIntCod}" />
+
+			<h:panelGroup id="pnPerfilObjeto">
+				<p:dialog widgetVar="dlg" modal="true" id="dlgPerfil" responsive="true" onHide="PF('dlg').toggleMaximize();">
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" id="pnlPerfil">
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="perfil" value="Perfil" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="perfil" value="#{perfilObjetoMB.perfilSelecionado}" label="Perfil" required="true" layout="grid" styleClass="Wid100Percent" converter="perfil">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Perfil" itemValue="#{null}" />
+								<f:selectItems value="#{perfilObjetoMB.perfis}" var="perfil" itemLabel="#{perfil.perStrNome}" itemValue="#{perfil}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="objetos" value="Objetos" styleClass="TxtAlgLeft" />
+							<p:selectCheckboxMenu filter="true" filterMatchMode="contains" id="objetos" value="#{perfilObjetoMB.objetosSelecionados}" label="Objetos" required="true"
+								styleClass="Wid100Percent" converter="objeto">
+								<f:selectItems value="#{perfilObjetoMB.objetos}" var="objeto" itemLabel="#{objeto.objStrDescricao}" itemValue="#{objeto}" />
+							</p:selectCheckboxMenu>
+						</h:panelGroup>
+
+					</p:panelGrid>
+					<h:panelGroup styleClass="MarLeft15">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{perfilObjetoMB.actionPersist}" update=":sdp:pnPrincipal" process="@this, :sdp:pnlPerfil"
+									oncomplete="handleDialogSubmit(xhr, status, args)" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+							</div>
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+							</div>
+						</div>
+					</h:panelGroup>
+				</p:dialog>
+			</h:panelGroup>
+
+			<h:panelGroup id="pnCrud">
+				<p:dataTable emptyMessage="Nenhum perfil Encontrado" id="tbPerfil" value="#{perfilObjetoMB.entityList}" var="perfil" rows="10" paginatorPosition="bottom"
+					paginatorAlwaysVisible="true" paginator="true" reflow="true">
+					<f:facet name="header">Lista de Perfil Objetos</f:facet>
+					<p:column styleClass="Wid35">
+						<p:rowToggler />
+					</p:column>
+					<p:column filterBy="#{perfil.perfil.perStrNome}" sortBy="#{perfil.perfil.perStrNome}" filterMatchMode="contains" headerText="Nome">
+						<h:outputText value="#{perfil.perfil.perStrNome}" />
+					</p:column>
+
+					<p:column headerText="Editar" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat Wid100Percent" value="Editar" process="@this" update=":sdp:pnPrincipal"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+							<f:setPropertyActionListener value="#{perfil}" target="#{perfilObjetoMB.entity}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column headerText="Excluir" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-remove" value="Excluir" styleClass="red-btn flat Wid100Percent" action="#{perfilObjetoMB.actionRemove}" update="tbPerfil" process="@this">
+							<f:setPropertyActionListener value="#{perfil}" target="#{perfilObjetoMB.entity}" />
+						</p:commandButton>
+					</p:column>
+					<p:rowExpansion>
+						<p:dataTable emptyMessage="Nenhum perfil Encontrado" id="tbObjetos" value="#{perfil.objetos}" var="objeto" rows="5" paginatorPosition="bottom" paginatorAlwaysVisible="true"
+							paginator="true">
+							<f:facet name="header">Lista de Objetos</f:facet>
+							<p:column filterBy="#{objeto.objStrDescricao}" filterMatchMode="contains" headerText="Nome" sortBy="#{objeto.objStrDescricao}">
+								<h:outputText value="#{objeto.objStrDescricao}" />
+							</p:column>
+							<p:column filterBy="#{objeto.objStrObjeto}" sortBy="#{objeto.objStrObjeto}" filterMatchMode="contains" headerText="Objeto">
+								<h:outputText value="#{objeto.objStrObjeto}" />
+							</p:column>
+							<p:column filterBy="#{objeto.statusStr}" filterMatchMode="contains" headerText="Status" sortBy="#{objeto.statusStr}">
+								<h:outputText value="#{objeto.statusStr}" />
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+				<br />
+				<h:panelGroup id="botoes">
+					<div class="ui-g-12 ui-lg-4"></div>
+					<div class="ui-g-12 ui-lg-4">
+						<p:commandButton icon="ui-icon-add" resetValues="true" value="Adicionar" styleClass="secondary flat Wid100Percent" actionListener="#{perfilObjetoMB.actionNew}" process="@this"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnPrincipal" />
+					</div>
+					<div class="ui-g-12 ui-lg-4"></div>
+				</h:panelGroup>
+				<br />
+				<br />
+			</h:panelGroup>
+		</h:panelGroup>
+		<script type="text/javascript">
+			function handleDialogSubmit(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>

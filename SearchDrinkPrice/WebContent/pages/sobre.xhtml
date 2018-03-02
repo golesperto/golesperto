@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title"></ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+		<p:panelGrid styleClass="Wid100Percent MarTop20">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="3">Atualizações | 0.2.0</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+
+		<p:panelGrid styleClass="Wid100Percent MarTop20">
+			<h:inputHidden value="#{sobreMB.titulo}" />
+			<f:facet name="header">
+				<p:row>
+					<p:column>Data</p:column>
+					<p:column>Local</p:column>
+					<p:column>Descrição</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column>12/02/2016</p:column>
+				<p:column>Projeto</p:column>
+				<p:column>Criado novo projeto.</p:column>
+			</p:row>
+		</p:panelGrid>
+	</ui:define>
+</ui:composition>

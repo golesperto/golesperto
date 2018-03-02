@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#{menuLayoutMB.themeColors[menuLayoutMB.theme]}" />
+	</f:facet>
+	<title>sdp</title>
+	<script type="text/javascript" src="../resources/js/layout.js"></script>
+	<script type="text/javascript" src="../resources/js/ripple.js"></script>
+	<script type="text/javascript" src="../resources/js/swipe.js"></script>
+	<script type="text/javascript" src="../resources/js/nanoscroller.js"></script>
+	<script type="text/javascript">
+		//<![CDATA[
+		function skinChart() {
+			this.cfg.shadow = false;
+			this.cfg.title = '';
+			this.cfg.seriesColors = [ '#FFC107', '#03A9F4' ];
+			this.cfg.grid = {
+				background : '#ffffff',
+				borderColor : '#ffffff',
+				gridLineColor : '#EEEEEE',
+				shadow : false
+			};
+			this.cfg.axesDefaults = {
+				rendererOptions : {
+					textColor : '#212121'
+				}
+			};
+			this.cfg.seriesDefaults = {
+				shadow : false,
+				lineWidth : 1,
+				markerOptions : {
+					shadow : false,
+					size : 7,
+					style : 'circle'
+				}
+			}
+		}
+
+		PrimeFaces.locales['pt'] = {
+			closeText : 'Fechar',
+			prevText : '&#x3c;Anterior',
+			nextText : 'Pr&oacute;ximo&#x3e;',
+			currentText : 'Hoje',
+			monthNames : [ 'Janeiro', 'Fevereiro', 'Mar&ccedil;o', 'Abril',
+					'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+					'Novembro', 'Dezembro' ],
+			monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+					'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+			dayNames : [ 'Domingo', 'Segunda-feira', 'Ter&ccedil;a-feira',
+					'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
+					'S&aacute;bado' ],
+			dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex',
+					'S&aacute;b' ],
+			dayNamesMin : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex',
+					'S&aacute;b' ],
+			weekHeader : 'Sm',
+			firstDay : 1,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			month : 'Mês',
+			week : 'Semana',
+			day : 'Dia',
+			allDayText : 'Todo Dia'
+		};
+
+		jQuery(function($) {
+			if ($.datepicker) {
+				$.datepicker.regional['pt-BR'] = {
+					closeText : 'Fechar',
+					prevText : '&#x3c;Anterior',
+					nextText : 'Pr&oacute;ximo&#x3e;',
+					currentText : 'Hoje',
+					monthNames : [ 'Janeiro', 'Fevereiro', 'Mar&ccedil;o',
+							'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+							'Setembro', 'Outubro', 'Novembro', 'Dezembro' ],
+					monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai',
+							'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+					dayNames : [ 'Domingo', 'Segunda-feira',
+							'Ter&ccedil;a-feira', 'Quarta-feira',
+							'Quinta-feira', 'Sexta-feira', 'S&aacute;bado' ],
+					dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex',
+							'S&aacute;b' ],
+					dayNamesMin : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex',
+							'S&aacute;b' ],
+					weekHeader : 'Sm',
+					dateFormat : 'dd/MM/yyyy hh:mm:ss',
+					firstDay : 0,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : ''
+				};
+				$.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+			}
+			if ($.timepicker) {
+				$.timepicker.regional['pt-BR'] = {
+					currentText : "Agora",
+					closeText : "OK",
+					ampm : false,
+					timeFormat : "hh:mm:ss",
+					timeOnlyTitle : "Definição do Horário",
+					timeText : "Horário",
+					hourText : "Hora",
+					minuteText : "Minuto",
+					secondText : "Segundo",
+					showSecond : false
+				};
+				$.timepicker.setDefaults($.timepicker.regional['pt-BR']);
+			}
+		});
+
+		function mascaraTelefone() {
+			jQuery("input.telefone").mask("(99) 9999-9999?9").focusout(
+					function(event) {
+						var target, phone, element;
+						target = (event.currentTarget) ? event.currentTarget
+								: event.srcElement;
+						phone = target.value.replace(/\D/g, '');
+						element = $(target);
+						element.unmask();
+						if (phone.length > 10) {
+							element.mask("(99) 99999-999?9");
+						} else {
+							element.mask("(99) 9999-9999?9");
+						}
+					});
+		}
+
+		function mascaraCPF() {
+			jQuery("input.cpf").mask("999.999.999-9?9").focusout(
+					function(event) {
+						var target, phone, element;
+						target = (event.currentTarget) ? event.currentTarget
+								: event.srcElement;
+						phone = target.value.replace(/\D/g, '');
+						element = $(target);
+						element.unmask();
+						element.mask("999.999.999-9?9");
+					});
+		}
+
+		function mascaraCEP() {
+			jQuery("input.cep").mask("99.999-99?9").focusout(
+					function(event) {
+						var target, phone, element;
+						target = (event.currentTarget) ? event.currentTarget
+								: event.srcElement;
+						phone = target.value.replace(/\D/g, '');
+						element = $(target);
+						element.unmask();
+						element.mask("99.999-99?9");
+					});
+		}
+		//]]>
+	</script>
+	<link href="../resources/css/nanoscroller.css" rel="stylesheet" type="text/css"></link>
+	<link href="../resources/css/animate.css" rel="stylesheet" type="text/css"></link>
+	<link href="../resources/css/ripple.css" rel="stylesheet" type="text/css"></link>
+	<link href="../font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"></link>
+	<link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"></link>
+	<link href="../resources/css/layout-#{menuLayoutMB.theme}.css" rel="stylesheet" type="text/css"></link>
+	<link rel="shortcut icon" href="../resources/images/adm.ico" type="image/x-icon"></link>
+	<link href="../resources/css/sdp.css" rel="stylesheet" type="text/css"></link>
+	<ui:insert name="head" />
+</h:head>
+
+<h:body styleClass="main-body #{menuLayoutMB.compact ? 'layout-compact' : null}">
+
+	<div class="layout-wrapper #{menuLayoutMB.menuLayout}">
+		<ui:include src="./topbarDashboard.xhtml" />
+
+		<div class="layout-main">
+			<h:form id="sdp">
+				<p:ajaxStatus onstart="PF('loading').show();" onsuccess="PF('loading').hide();" />
+
+				<p:dialog modal="true" widgetVar="loading" draggable="false" closable="false" showHeader="false" resizable="false">
+					<i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+				Carregando...
+				</p:dialog>
+				<p:growl id="mensagens" showDetail="true" autoUpdate="true" globalOnly="true" life="5000" />
+				<ui:insert name="content" />
+			</h:form>
+			<ui:include src="./footer.xhtml" />
+		</div>
+	</div>
+</h:body>
+
+</html>

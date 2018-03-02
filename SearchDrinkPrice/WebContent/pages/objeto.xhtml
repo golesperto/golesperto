@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cadastro de Objetos</ui:define>
+
+	<ui:define name="head"></ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="pnPrincipal">
+			<h:inputHidden id="id" value="#{objetoMB.entity.objIntCod}" />
+
+			<h:panelGroup id="pnObjeto">
+				<p:dialog widgetVar="dlg" modal="true" id="dlgObjeto" responsive="true" onHide="PF('dlg').toggleMaximize();">
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group TxtAlgCenter" id="pnlObjeto">
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="nome" value="#{objetoMB.entity.objStrObjeto}" required="true" styleClass="Wid100Percent" maxlength="50" />
+							<p:outputLabel for="nome" value="Nome" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="desc" value="#{objetoMB.entity.objStrDescricao}" required="true" styleClass="Wid100Percent" maxlength="255" />
+							<p:outputLabel for="desc" value="Descrição" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield MarTop18 ">
+							<p:inputText id="icone" value="#{objetoMB.entity.objStrIcone}" required="true" styleClass="Wid100Percent" maxlength="50" />
+							<p:outputLabel for="icone" value="Icone" />
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="menu" value="Menu" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="menu" value="#{objetoMB.entity.menu}" label="Menu" required="true" layout="grid" styleClass="Wid100Percent" converter="menu">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Menu" itemValue="#{null}" />
+								<f:selectItems value="#{objetoMB.menus}" var="menu" itemLabel="#{menu.menStrNome}" itemValue="#{menu}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-combo">
+							<p:outputLabel for="status" value="Status" styleClass="TxtAlgLeft" />
+							<p:selectOneMenu id="status" value="#{objetoMB.entity.objChaStatus}" label="Status" required="true" layout="grid" styleClass="Wid100Percent">
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione um Status" itemValue="#{null}" />
+								<f:selectItems value="#{objetoMB.status}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+					</p:panelGrid>
+					<h:panelGroup styleClass="MarLeft15">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="persist" icon="ui-icon-save" value="Salvar" actionListener="#{objetoMB.actionPersist}" update=":sdp:pnPrincipal" process="@this, :sdp:pnlObjeto"
+									oncomplete="handleDialogSubmit(xhr, status, args)" styleClass="MarTop10 MarBottom10 Wid100Percent secondary" />
+							</div>
+							<div class="ui-g-12 ui-lg-6">
+								<p:commandButton id="close" icon="fa fa-times" value="Fechar" process="@this" styleClass="MarTop10 MarBottom10 red-btn Wid100Percent" oncomplete="PF('dlg').hide();" />
+							</div>
+						</div>
+					</h:panelGroup>
+				</p:dialog>
+			</h:panelGroup>
+
+			<h:panelGroup id="pnCrud">
+				<p:dataTable emptyMessage="Nenhum objeto Encontrado" id="tbObjeto" value="#{objetoMB.entityList}" var="objeto" rows="10" paginatorPosition="bottom"
+					paginatorAlwaysVisible="true" paginator="true" reflow="true">
+					<f:facet name="header">Lista de Objetos</f:facet>
+					<p:column filterBy="#{objeto.objStrObjeto}" sortBy="#{objeto.objStrObjeto}" filterMatchMode="contains" headerText="Nome">
+						<h:outputText value="#{objeto.objStrObjeto}" />
+					</p:column>
+					<p:column filterBy="#{objeto.objStrDescricao}" filterMatchMode="contains" headerText="Descrição" sortBy="#{objeto.objStrDescricao}">
+						<h:outputText value="#{objeto.objStrDescricao}" />
+					</p:column>
+					<p:column filterBy="#{objeto.objStrIcone}" filterMatchMode="contains" headerText="Icone" sortBy="#{objeto.objStrIcone}">
+						<h:outputText value="#{objeto.iconeImagem}  #{objeto.objStrIcone}" escape="false" />
+					</p:column>
+					<p:column filterBy="#{objeto.statusStr}" filterMatchMode="contains" headerText="Status" sortBy="#{objeto.statusStr}">
+						<h:outputText value="#{objeto.statusStr}" />
+					</p:column>
+					<p:column filterBy="#{objeto.menu.menStrNome}" filterMatchMode="contains" headerText="Menu" sortBy="#{objeto.menu.menStrNome}">
+						<h:outputText value="#{objeto.menu.menStrNome}" />
+					</p:column>
+
+					<p:column headerText="Editar" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat Wid100Percent" value="Editar" process="@this" update=":sdp:pnPrincipal"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
+							<f:setPropertyActionListener value="#{objeto}" target="#{objetoMB.entity}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column headerText="Excluir" styleClass="TxtAlignCenter">
+						<p:commandButton icon="ui-icon-remove" value="Excluir" styleClass="red-btn flat  Wid100Percent" action="#{objetoMB.actionRemove}" update="tbObjeto" process="@this">
+							<f:setPropertyActionListener value="#{objeto}" target="#{objetoMB.entity}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:panelGroup id="botoes">
+					<div class="ui-g-12 ui-lg-4"></div>
+					<div class="ui-g-12 ui-lg-4">
+						<p:commandButton icon="ui-icon-add" resetValues="true" value="Adicionar" styleClass="secondary flat Wid100Percent" actionListener="#{objetoMB.actionNew}" process="@this"
+							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnPrincipal" />
+					</div>
+					<div class="ui-g-12 ui-lg-4"></div>
+				</h:panelGroup>
+				<br />
+				<br />
+			</h:panelGroup>
+		</h:panelGroup>
+		<script type="text/javascript">
+			function handleDialogSubmit(xhr, status, args) {
+				if (args.validationFailed) {
+					PF('dlg').toggleMaximize();
+					PF('dlg').show();
+					PF('dlg').toggleMaximize();
+				} else {
+					PF('dlg').hide();
+					PF('dlg').toggleMaximize();
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>
