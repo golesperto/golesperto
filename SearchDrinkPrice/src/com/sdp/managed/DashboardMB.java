@@ -1,5 +1,6 @@
 package com.sdp.managed;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 import org.primefaces.event.map.GeocodeEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.GeocodeResult;
 import org.primefaces.model.map.LatLng;
@@ -24,6 +27,7 @@ import com.sdp.entity.EmpresaProduto;
 import com.sdp.entity.Marca;
 import com.sdp.entity.Produto;
 import com.sdp.entity.ProdutoTipo;
+import com.sdp.util.JSFHelper;
 import com.sdp.util.Mapa;
 import com.sdp.util.Mensagens;
 import com.sdp.util.Utils;
@@ -74,6 +78,21 @@ public class DashboardMB extends GenericManagedBean<EmpresaProduto> {
 		carregarProdutoTipos();
 		carregarEntityList();
 		mapModel = new DefaultMapModel();
+	}
+
+	public StreamedContent getDownload() {
+		try {
+			InputStream stream = JSFHelper.getExternalContext()
+					.getResourceAsStream("/resources/apk/golesperto-debug.apk");
+			StreamedContent file = new DefaultStreamedContent(stream, "application/vnd.android.package-archive",
+					"golesperto-debug.apk");
+			return file;
+		} catch (Exception e) {
+			e.printStackTrace();
+			addError(Mensagens.getMensagem(Mensagens.ERRO_AO_BUSCAR_REGISTROS), "");
+			log.error(Mensagens.getMensagem(Mensagens.ERRO_AO_BUSCAR_REGISTROS), e);
+		}
+		return null;
 	}
 
 	public void carregarMarcas() {

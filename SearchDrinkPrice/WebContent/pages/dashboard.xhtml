@@ -76,6 +76,9 @@
 								<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank" layout="grid">
 									<p:commandButton id="save" icon="ui-icon-search" value="Filtrar" update=":sdp:pnPrincipal" process="@this, filtros, :sdp:lat, :sdp:lng"
 										actionListener="#{dashboardMB.carregarEntityList}" />
+									<p:commandButton value="Baixar Aplicativo" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" styleClass="red-btn">
+										<p:fileDownload value="#{dashboardMB.download}" />
+									</p:commandButton>
 								</p:panelGrid>
 							</div>
 							<div class="ui-g-12 ui-lg-2"></div>
@@ -186,6 +189,14 @@
 				$('html, body').animate({
 					scrollTop : 0
 				}, 'slow');
+			}
+
+			function start() {
+				PF('loading').show();
+			}
+
+			function stop() {
+				PF('loading').hide();
 			}
 		</script>
 	</ui:define>
