@@ -24,9 +24,9 @@
 		<properties>
 			<property name="eclipselink.jdbc.native-sql" value="true" />
 			<property name="eclipselink.jdbc.batch-writing" value="JDBC" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/SDP" />
-			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<property name="javax.persistence.jdbc.password" value="postgres" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-184-73-196-65.compute-1.amazonaws.com:5432/dg3abcl90b4k8" />
+			<property name="javax.persistence.jdbc.user" value="dwzicptqketdqq" />
+			<property name="javax.persistence.jdbc.password" value="83d741f097e923b458d3883c9645bcee025e634fb791d074772cb935cfa57e52" />
 			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
 			<property name="eclipselink.jpa.uppercase-column-names"	value="true" />
 			<property name="eclipselink.jdbc.uppercase-columns"	value="true" />

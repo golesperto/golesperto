@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="PU_SDP">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>com.sdp.entity.DiaFuncionamento</class>
+		<class>com.sdp.entity.Empresa</class>
+		<class>com.sdp.entity.EmpresaDiaFuncionamento</class>
+		<class>com.sdp.entity.EmpresaProduto</class>
+		<class>com.sdp.entity.LogAcesso</class>
+		<class>com.sdp.entity.Marca</class>
+		<class>com.sdp.entity.Menu</class>
+		<class>com.sdp.entity.Objeto</class>
+		<class>com.sdp.entity.Perfil</class>
+		<class>com.sdp.entity.PerfilObjeto</class>
+		<class>com.sdp.entity.Produto</class>
+		<class>com.sdp.entity.ProdutoImagem</class>
+		<class>com.sdp.entity.ProdutoTipo</class>
+		<class>com.sdp.entity.ProdutoVolume</class>
+		<class>com.sdp.entity.Usuario</class>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<validation-mode>NONE</validation-mode>
+		<properties>
+			<property name="eclipselink.jdbc.native-sql" value="true" />
+			<property name="eclipselink.jdbc.batch-writing" value="JDBC" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/SDP" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="postgres" />
+			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+			<property name="eclipselink.jpa.uppercase-column-names"	value="true" />
+			<property name="eclipselink.jdbc.uppercase-columns"	value="true" />
+			<property name="eclipselink.jdbc.cache-statements" value="false"/>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			<property name="eclipselink.logging.level.sql" value="FINE" />
+			<property name="eclipselink.logging.parameters" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

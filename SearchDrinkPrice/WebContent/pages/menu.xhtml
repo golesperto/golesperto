@@ -46,15 +46,6 @@
 			</h:panelGroup>
 
 			<h:panelGroup id="pnCrud">
-				<p:commandButton icon="ui-icon-add" resetValues="true" styleClass="BotaoCrud secondary flat" actionListener="#{menuMB.actionNew}" process="@this"
-					oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();" update=":sdp:pnPrincipal" />
-
-				<p:commandButton icon="ui-icon-edit" resetValues="true" styleClass="BotaoCrud orange-btn" onclick="PF('dlg').show();PF('dlg').toggleMaximize();"
-					rendered="#{menuMB.entity.menIntCod != null}" type="button" />
-
-				<p:commandButton icon="ui-icon-remove" styleClass="BotaoCrud red-btn" rendered="#{menuMB.entity.menIntCod != null}" actionListener="#{menuMB.actionRemove}" update=":sdp:pnCrud"
-					process="@this" />
-
 				<p:dataTable emptyMessage="Nenhum menu Encontrado" id="tbMenu" value="#{menuMB.entityList}" var="menu" rows="10" paginatorPosition="bottom" paginatorAlwaysVisible="true"
 					paginator="true" reflow="true">
 					<f:facet name="header">Lista de Menus</f:facet>
@@ -71,7 +62,7 @@
 					<p:column headerText="Editar" styleClass="TxtAlignCenter">
 						<p:commandButton icon="ui-icon-edit" styleClass="orange-btn flat Wid100Percent" value="Editar" process="@this" update=":sdp:pnPrincipal"
 							oncomplete="PF('dlg').show();PF('dlg').toggleMaximize();">
-							<f:setPropertyActionListener value="#{menu}" target="#{marcaMB.entity}" />
+							<f:setPropertyActionListener value="#{menu}" target="#{menuMB.entity}" />
 						</p:commandButton>
 					</p:column>
 
